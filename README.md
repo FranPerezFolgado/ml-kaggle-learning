@@ -26,7 +26,7 @@ import pandas as pd
 The most important part of Pandas library is DataFrame. A dataframe holds the data similar to a sheet in Excel or a table in SQL database.
 We can explore the data inside a dataframe with:
 ```
-data_file_path='./data.csv'
+data_file_path = './data.csv'
 data = pd.read_csv(data_file)
 print(data.describe())
 ```
