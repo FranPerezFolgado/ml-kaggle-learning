@@ -60,10 +60,11 @@ Using this package you can create models. While coding, this package is written 
 Scikit-learn is easily the most popular library for modeling the types of data typically stored in DataFrames.
 
 The steps to building a model are:
-..* **Define**: Declare the type of the model and some other parameters.
-..* **Fit**: Capture patterns from provided data. The heart of modeling.
-..* **Predict**: Just what it sounds like.
-..* **Evaluate**: Determine how accurate the model predictions are.
+
+* **Define**: Declare the type of the model and some other parameters.
+* **Fit**: Capture patterns from provided data. The heart of modeling.
+* **Predict**: Just what it sounds like.
+* **Evaluate**: Determine how accurate the model predictions are.
 
 When you have the data stored in a DataFrame, you can declare your prediction target. By convention is called **y**.
 ```y = data.Price```
