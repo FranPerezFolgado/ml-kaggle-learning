@@ -18,6 +18,7 @@ melbourne_features = ['Rooms','Bathroom','Landsize','Lattitude','Longtitude']
 X = melbourne_data[melbourne_features]
 
 print(X.describe())
+print('head')
 print(X.head())
 
 from sklearn.tree import DecisionTreeRegressor
@@ -83,3 +84,13 @@ final_model = DecisionTreeRegressor(max_leaf_nodes=best_tree_size, random_state=
 
 # fit the final model and uncomment the next two lines
 final_model.fit(X, y)
+
+
+# Random Forests
+
+from sklearn.ensemble import RandomForestRegressor
+
+forest_model = RandomForestRegressor(random_state=1)
+forest_model.fit(train_X, train_y)
+melb_preds = forest_model.predict(val_X)
+print(mean_absolute_error(val_y, melb_preds))
