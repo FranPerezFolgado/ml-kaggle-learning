@@ -18,7 +18,6 @@ melbourne_features = ['Rooms','Bathroom','Landsize','Lattitude','Longtitude']
 X = melbourne_data[melbourne_features]
 
 print(X.describe())
-print('head')
 print(X.head())
 
 from sklearn.tree import DecisionTreeRegressor

@@ -19,13 +19,13 @@ The point at the bottom where we make a prediction is called a _leaf_**.
 ## Pandas
 
 You can import the data using pandas.
-```
+```python
 import pandas as pd
 ```
 
 The most important part of Pandas library is DataFrame. A dataframe holds the data similar to a sheet in Excel or a table in SQL database.
 We can explore the data inside a dataframe with:
-```
+```python
 data_file_path = './data.csv'
 data = pd.read_csv(data_file)
 print(data.describe())
@@ -56,7 +56,7 @@ With `data.head()` you can see the top data from the DataFrame
 
 ## SCIKIT-SKLEARN
 
-Using this package you can create models. While coding, this package is written as `sklearn`.
+Using this package you can create models. While coding, this package is written as `sklearn`. 
 Scikit-learn is easily the most popular library for modeling the types of data typically stored in DataFrames.
 
 The steps to building a model are:
@@ -67,19 +67,22 @@ The steps to building a model are:
 * **Evaluate**: Determine how accurate the model predictions are.
 
 When you have the data stored in a DataFrame, you can declare your prediction target. By convention is called **y**.
-```y = data.Price```
+
+```python
+y = data.Price
+```
 
 The columns passed to our model for prediction are called **Features**. 
 Now select the features you want to use to predict the **Price**. By convention this list is called **X**.
 
-```
+```python
 features = ['Rooms', 'Bathroom', 'Landsize', 'Lattitude', 'Longtitude']
 
 X = data[features]
 ```
 
 ### Example of declaring a Model and predict.
-```
+```python
 from sklearn.tree import DecisionTreeRegressor
 
 # Define model. Specify a number for random_state to ensure same results each run
@@ -92,3 +95,37 @@ print(X.head())
 print("The predictions are")
 print(model.predict(X.head()))
 ```
+
+The random_state value does reference to this:
+
+> random_state : int, RandomState instance or None, optional (default=None)
+> If int, random_state is the seed used by the random number generator; If RandomState instance, random_state is the random number generator; If None, the random number generator is the RandomState instance used by np.random.
+
+
+### Mean Absolute Error (MAE)
+
+Mean Absolute Error is one of the many mertrics for summarizing model quality.  
+
+The prediction error for each house is:
+``` 
+error = actual - predicted
+``` 
+
+For example if a house costs $150,000 and the model predicted $100,000 the error is $50,000.
+
+With the MAE metric, we take the absolute value of each error, this converts each error to a positive number and take the average of those absolute errors. 
+
+To calculate mae:
+
+```python
+from sklearn.metrics import mean_absolute_error
+
+predicted_home_prices = model.predict(X)
+mean_absolute_error(y, predicted_home_prices)
+```
+
+### Split data
+
+The problem with that prediction is that we used the whole dataset to get it, so the model will appear accurate in the training data.
+Since model's practical value come from making predictions on new data, we should measure performance on data that wasn't used to build the model. The most easy way to do this is excluding some data from the model-building process, and then use those to test model's accuracy on data it hasn't seen before.
+This data is calles **validation data**.
