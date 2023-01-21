@@ -43,3 +43,51 @@ min        1.000000  8.500000e+04      0.000000   3000.000000      0.000000     
 max       10.000000  9.000000e+06     48.100000   3977.000000     20.000000      8.000000     10.000000  433014.000000  44515.000000  2018.000000    -37.408530    145.526350   21650.000000
 ```
 
+With `data.head()` you can see the top data from the DataFrame
+```
+   Rooms  Bathroom  Landsize  Lattitude  Longtitude
+1      2       1.0     156.0   -37.8079    144.9934
+2      3       2.0     134.0   -37.8093    144.9944
+4      4       1.0     120.0   -37.8072    144.9941
+6      3       2.0     245.0   -37.8024    144.9993
+7      2       1.0     256.0   -37.8060    144.9954
+```
+
+
+## SCIKIT-SKLEARN
+
+Using this package you can create models. While coding, this package is written as `sklearn`.
+Scikit-learn is easily the most popular library for modeling the types of data typically stored in DataFrames.
+
+The steps to building a model are:
+..* **Define**: Declare the type of the model and some other parameters.
+..* **Fit**: Capture patterns from provided data. The heart of modeling.
+..* **Predict**: Just what it sounds like.
+..* **Evaluate**: Determine how accurate the model predictions are.
+
+When you have the data stored in a DataFrame, you can declare your prediction target. By convention is called **y**.
+```y = data.Price```
+
+The columns passed to our model for prediction are called **Features**. 
+Now select the features you want to use to predict the **Price**. By convention this list is called **X**.
+
+```
+features = ['Rooms', 'Bathroom', 'Landsize', 'Lattitude', 'Longtitude']
+
+X = data[features]
+```
+
+### Example of declaring a Model and predict.
+```
+from sklearn.tree import DecisionTreeRegressor
+
+# Define model. Specify a number for random_state to ensure same results each run
+model = DecisionTreeRegressor(random_state=1)
+
+# Fit model
+model.fit(X, y)
+print("Making predictions for the following 5 houses:")
+print(X.head())
+print("The predictions are")
+print(model.predict(X.head()))
+```
