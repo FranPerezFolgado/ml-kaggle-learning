@@ -1,6 +1,6 @@
 import pandas as pd
 
-csv_path = './resources/melb_data.csv'
+csv_path = './introduction-to-ML/resources/melb_data.csv'
 
 melbourne_data = pd.read_csv(csv_path)
 

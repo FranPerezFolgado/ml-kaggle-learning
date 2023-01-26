@@ -129,3 +129,23 @@ mean_absolute_error(y, predicted_home_prices)
 The problem with that prediction is that we used the whole dataset to get it, so the model will appear accurate in the training data.
 Since model's practical value come from making predictions on new data, we should measure performance on data that wasn't used to build the model. The most easy way to do this is excluding some data from the model-building process, and then use those to test model's accuracy on data it hasn't seen before.
 This data is calles **validation data**.
+
+The scikit-learn library has a function to break up the data into two pieces -> **train_test_split**.
+
+```python
+from sklearn.model_selection import train_test_split
+
+# split data into training and validation data, for both features and target
+# The split is based on a random number generator. Supplying a numeric value to
+# the random_state argument guarantees we get the same split every time we
+# run this script.
+train_X, val_X, train_y, val_y = train_test_split(X, y, random_state = 0)
+# Define model
+melbourne_model = DecisionTreeRegressor()
+# Fit model
+melbourne_model.fit(train_X, train_y)
+
+# get predicted prices on validation data
+val_predictions = melbourne_model.predict(val_X)
+print(mean_absolute_error(val_y, val_predictions))
+```
