@@ -1,6 +1,8 @@
 import pandas as pd
 
 wine_data_path = './pandas/resources/winemag-data-130k-v2.csv'
+ca_videos_data = './pandas/resources/CAvideos.csv'
+gb_videos_data = './pandas/resources/GBvideos.csv'
 
 '''
 DataFrame:
@@ -240,3 +242,74 @@ print(wine_reviews.groupby(['country','province']).apply(lambda df: df.loc[df.po
 # another amazing method is agg(), it lets you run a bunch of different functions on the dataframe simultaneously
 #for example, generate a simple statistical summary of the dataset
 print(wine_reviews.groupby('country').price.agg([len,min,max]))
+
+## Multi-indexes
+# We can group by multiple levels. for example:
+countries_reviewed = wine_reviews.groupby(['country','province']).description.agg([len])
+print(countries_reviewed)
+# we can see the index type like this:
+mi = countries_reviewed.index
+print(type(mi))
+# We can reset a multi-index back to a regular index
+countries_reviewed = countries_reviewed.reset_index()
+print(countries_reviewed)
+## Sorting
+# The data is automatically ordered by the index, but we can sort it by the field we want.
+print(countries_reviewed.sort_values(by='len'))
+# sort_values() defaults to an ascending sort, we can change it by:
+print(countries_reviewed.sort_values(by='len', ascending=False))
+# we can sort by index with the companion method, it has the same arguments and default order
+print(countries_reviewed.sort_index())
+# we can also sort by more than one column at a time:
+print(countries_reviewed.sort_values(by=['country','len']))
+
+
+### Data types and missing values
+# the data type for a column in a DataFrame or a Series is known as dtype
+# we can use dtpe property to get the type of a specific column
+print(wine_reviews.price.dtype) 
+# we can get the dtype of every column by:
+print(wine_reviews.dtypes)
+# the columns consisting entirely of string do not get their own type, they are instead given the object type
+# we can convert a column wherever a conversion makes sense by using astype()
+print(wine_reviews.points.astype('float64'))
+
+# a DataFrame or Series index has its own dtype:
+print(wine_reviews.index.dtype)
+
+## Missing data
+# missing data are given the value NaN (short for Not a Number), NaN values are always float64 dtype
+# we can select NaN entries by using pd.isnull() (or pd.notnull()) 
+print(wine_reviews[pd.isnull(wine_reviews.country)])
+# We can replace missing values with fillna()
+reviews_filled = wine_reviews.region_2.fillna('Unknown')
+print(reviews_filled.head())
+# Or we could fill each NaN with the first non-null value thet appears sometime after the given record th the database
+
+# we also can replace data 
+print(wine_reviews.taster_twitter_handle.replace('@kerinokeefe','@kerino'))
+# the replace method is useful for replacing missing data which is given like 'Unknown', 'Undisclosed', 'Invalid'
+
+
+### Renaming and Combining
+## Renaming
+# rename() can be used to change index and/or column names
+print(wine_reviews.rename(columns={'points':'score'}))
+print(wine_reviews.rename(index={0: 'firstEntry', 1:'secondEntry'}))
+# Usually set_index() is more convinient than rename index
+# both row and column index have their own name attr. You can rename these:
+print(wine_reviews.rename_axis('wines',axis='rows').rename_axis('fields',axis='columns'))
+## Combining
+# methods for combining: concat(), join(), merge()
+# concat() smush all elements together along an axis.
+canadian_youtube = pd.read_csv(ca_videos_data)
+british_youtube = pd.read_csv(gb_videos_data)
+
+print(pd.concat([canadian_youtube, british_youtube]))
+
+# join() combine different DF which have an index in common.
+# For example pull down videos that happened to be trending on the same day in both Canada an UK
+left = canadian_youtube.set_index(['title','trending_date'])
+right = british_youtube.set_index(['title','trending_date'])
+
+print(left.join(right, lsuffix='_CAN', rsuffix='_UK'))
